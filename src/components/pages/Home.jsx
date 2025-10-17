@@ -9,7 +9,6 @@ export default function Home() {
   return (
   <>
     <First/>
-    <Perfil/>
     <Catalogo/>
     <Noticias/>
   </>

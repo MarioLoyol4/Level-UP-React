@@ -13,9 +13,12 @@ section{
 }
 
 h1,h2 {
-    font-family: "Orbitron", sans-serif;
-    color: aliceblue;
+  
+  font-family: "Orbitron", sans-serif;
+  color: aliceblue;
 }
+
+
 
 #first{
     display: flex;

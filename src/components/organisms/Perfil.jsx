@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function Perfil() {
   return (
-     <section id="perfil">
+    <section id="perfil">
     <h2>Mi Perfil</h2>
     <div className="row">
         <label>Nombre:</label>

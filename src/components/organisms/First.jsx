@@ -13,20 +13,19 @@ export default function First() {
                 <li className="dropdown">
                     <HashLink to="#catalogo" smooth>Catálogo ▾</HashLink>
                     <ul className="submenu" id="submenu">
-                        <li><a href="#" data-cat="juegos-mesa">Juegos de Mesa</a></li>
-                        <li><a href="#" data-cat="accesorios">Accesorios</a></li>
-                        <li><a href="#" data-cat="consolas">Consolas</a></li>
-                        <li><a href="#" data-cat="pc-gamer">Computadores Gamers</a></li>
-                        <li><a href="#" data-cat="sillas">Sillas Gamers</a></li>
-                        <li><a href="#" data-cat="mouse">Mouse</a></li>
-                        <li><a href="#" data-cat="mousepad">Mousepad</a></li>
-                        <li><a href="#" data-cat="poleras">Poleras Personalizadas</a></li>
-                        <li><a href="#" data-cat="polerones">Polerones Personalizados</a></li>
+                        <li><a href="/JuegosDeMesa" data-cat="juegos-mesa">Juegos de Mesa</a></li>
+                        <li><a href="/Accesorios" data-cat="accesorios">Accesorios</a></li>
+                        <li><a href="/Consolas" data-cat="consolas">Consolas</a></li>
+                        <li><a href="/Pc_gamer" data-cat="pc-gamer">Computadores Gamers</a></li>
+                        <li><a href="/Sillas" data-cat="sillas">Sillas Gamers</a></li>
+                        <li><a href="/Mouse" data-cat="mouse">Mouse</a></li>
+                        <li><a href="/Mousepad" data-cat="mousepad">Mousepad</a></li>
+                        <li><a href="/PolerasYPolerones" data-cat="poleras">Poleras Y polerones</a></li>
                     </ul>
                 </li>
 
-                <HashLink to="#about" smooth>Sobre nosotros</HashLink>
-                <HashLink to="#map" href='https://www.google.com/maps' smooth>Mapa de eventos</HashLink>
+                <HashLink to="/About" smooth>Sobre nosotros</HashLink>
+                <HashLink to="/Mapa" href='https://www.google.com/maps' smooth>Mapa de eventos</HashLink>
                 <li><a href="https://wa.me/56975525335">Soporte tecnico</a></li>
                 <li><a href="#" id="perfilLink">Mi perfil</a></li>
                 <li><a href="#" id="cerrar-sesion">Cerrar sesión</a></li>
