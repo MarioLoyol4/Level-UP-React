@@ -1,0 +1,81 @@
+import React from 'react'
+
+export default function Product(props) {
+    const productList = [
+        {
+            code:"",
+            image:"",
+            name:"",
+            description:"",
+            price:"",
+            category:"",
+        },
+        {
+            code:"",
+            image:"",
+            name:"",
+            description:"",
+            price:"",
+            category:"",
+        },
+        {
+            code:"",
+            image:"",
+            name:"",
+            description:"",
+            price:"",
+            category:"",
+        },
+        {
+            code:"",
+            image:"",
+            name:"",
+            description:"",
+            price:"",
+            category:"",
+        },
+        {
+            code:"",
+            image:"",
+            name:"",
+            description:"",
+            price:"",
+            category:"",
+        },
+        {
+            code:"",
+            image:"",
+            name:"",
+            description:"",
+            price:"",
+            category:"",
+        },
+        {
+            code:"",
+            image:"",
+            name:"",
+            description:"",
+            price:"",
+            category:"",
+        },
+        {
+            code:"",
+            image:"",
+            name:"",
+            description:"",
+            price:"",
+            category:"",
+        },
+        {
+            code:"",
+            image:"",
+            name:"",
+            description:"",
+            price:"",
+            category:"",
+        }
+    ]
+  return (
+    <div className='product'></div>
+  )
+}
