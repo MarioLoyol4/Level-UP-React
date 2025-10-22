@@ -3,12 +3,12 @@ import React from 'react'
 export default function Product(props) {
     const productList = [
         {
-            code:"",
-            image:"",
-            name:"",
-            description:"",
-            price:"",
-            category:"",
+            code:"AC001",
+            image:"/img/accesorios/mandoMolon1.png",
+            name:"mando de Xbox",
+            description:"zi",
+            price:"$31.990",
+            category:"accesorio",
         },
         {
             code:"",
