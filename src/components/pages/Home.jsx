@@ -3,6 +3,7 @@ import First from '../organisms/First'
 import Perfil from '../organisms/Perfil'
 import Catalogo from '../organisms/Catalogo'
 import Noticias from '../organisms/Noticias'
+import Product from '../organisms/Product'
 
 
 export default function Home() {
@@ -12,6 +13,7 @@ export default function Home() {
     <Catalogo/>
     <Perfil/>
     <Noticias/>
+
   </>
     
   )

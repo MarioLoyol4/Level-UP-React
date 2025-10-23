@@ -14,7 +14,7 @@ export default function LoginPage() {
 
   return (
     <div className='LoginForm'>
-      <Logo/>
+      
       {isLoginView ? (
         <Login onSwitchToRegister={showRegisterView}/>
       ) : (
