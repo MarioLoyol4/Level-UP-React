@@ -1,3 +1,4 @@
+import React from 'react'
 export default function Cart() {
   const products = JSON.parse(localStorage.getItem("productos")) || []
   return (

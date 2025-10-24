@@ -1,10 +1,9 @@
-import React from 'react'
+import React from 'react';
 
 
 export default function Logo() {
   return (
-    <div className="logo">
-        <img src={logoImg} alt="Logo"/>
-    </div>
-  )
+     <img src="img/Level-Up.png" alt="Logo Level-Up" />
+
+  );
 }
