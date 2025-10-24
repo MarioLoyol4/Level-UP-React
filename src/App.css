@@ -196,7 +196,7 @@ nav ul li a {
   justify-content: space-between;
   height: 100%; 
   transition: transform .5s;
-  opacity: 95%;
+  opacity: 90%;
 }
 
 .producto img {
@@ -205,7 +205,7 @@ nav ul li a {
 }
 
 .producto:hover{
-    transform: scale(1.2);
+    transform: scale(1.1);
     opacity: 100%;
 }
 
@@ -231,7 +231,6 @@ nav ul li a {
   padding: 8px 12px;
   border: none;
   border-radius: 5px;
-  background-color: #39FF14;
   color: black;
   font-weight: bold;
   cursor: pointer;
@@ -407,4 +406,23 @@ div.logo img{
 .error{
     outline: 2px red solid;
     background-color: #b43737;
+}
+
+
+td,
+th {
+  border: 1px #000000 solid;
+}
+
+td>img {
+  width: 80px;
+}
+
+.items {
+
+  width: 1.4rem;
+  height: 1.4rem;
+  display: inline-block;
+  font-size: .9rem;
+  font-weight: 700;
 }
