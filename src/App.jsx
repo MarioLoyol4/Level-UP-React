@@ -1,24 +1,22 @@
-
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import './App.css'
-import Home from './components/pages/Home'
-import LoginPage from './components/pages/LoginPage'
-import Cart from './components/pages/Cart'
-import { Link } from 'react-router-dom'
-import Perfil from './components/organisms/Perfil'
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import ProductoList from './components/ProductoList';
+import ProductoFrom from './components/ProductoFrom';
 
 
-function App(){
+function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<Home/>}/>
-        <Route path='/Login' element={<LoginPage/>}/>
-        <Route path='/cart' element = {<Cart/>}/>
-        <Route path='/perfil' element = {<Perfil/>}/>
-      </Routes>
-    </BrowserRouter>
-  )
+    <Router>
+      <div>
+        <h1>Book Management System</h1>
+        <Routes>
+          <Route path="/" element={<ProductoList />} />
+          <Route path="/add" element={<ProductoFrom />} />
+          <Route path="/edit/:id" element={<ProductoFrom />} />
+        </Routes>
+      </div>
+    </Router>
+  );
 }
 
-export default App
+export default App;
