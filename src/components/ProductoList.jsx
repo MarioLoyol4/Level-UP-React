@@ -1,57 +1,22 @@
-  import React, { useState, useEffect } from 'react';
-  import { Link } from 'react-router-dom';
-  import ProductoService from '../services/ProductoService';
+import React, { useEffect, useState } from 'react';
 
-  const ProductoList = () => {
-    const[productos, setProductos] = useState([]);
-
-    useEffect(() => {
-        fetchProductos();
-    }, []);
-
-    const fetchProductos = () => {
-        ProductoService.getAllProductos().then(response => {
-            setProductos(response.data);
-        }).catch(error => {
-            console.log('Error fetching productos:', error);
-        });
-    };
-
-    const deleteProducto = (id) => {
-        ProductoService.deleteProducto(id).then(() => {
-            fetchProductos();
-        }).catch(error => {
-            console.log('Error deleting producto:', error);
-        });
-    };
-
-    return(
-        <div>
-            <h2>Producto List</h2>
-            <Link to="/add">Add New Producto</Link>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Categoria</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {productos.map(producto => (
-                        <th key={producto.id}>
-                            <td>{producto.nombre}</td>
-                            <td>{producto.categoria}</td>
-                            <td>
-                                <Link to={`/edit/${producto.id}`}>Edit</Link>
-                                <button onClick={() => deleteProducto(producto.id)}>Delete</button>
-                            </td>
-                        </th>
-                    ))}
-                </tbody>
-            </table>
-        </div>
-    );
-  };
-
-  export default ProductoList;
+import { login } from '../services/AuthService';
+import ProductoService from '../services/ProductoService';
+export default function ProductosPage() {
+const [productos, setProductos] = useState([]);
+useEffect(() => {
+login("alumno", '123456').then(() => {
+ProductoService.getAllProductos().then(res => setProductos(res.data));
+});
+}, []);
+return (
+<div>
+<h1>Productos</h1>
+<ul>
+{productos.map(b => (
+<li key={b.id}>{b.title} - {b.author}</li>
+))}
+</ul>
+</div>
+);
+}

@@ -1,27 +1,28 @@
-import axios from 'axios'
-
-const BASE_URL = 'http://localhost:9090/api/productos';
-
-class ProductoService{
-    getAllProductos(){
-        return axios.get(BASE_URL);
-    }
-
-    getProductoById(id){
-        return axios.get(`${BASE_URL}/${id}`);
-    }
-
-    createProducto(producto){
-        return axios.post(BASE_URL, producto);
-    }
-
-    updateProducto(id, producto){
-        return axios.put(`${BASE_URL}/${id}`, producto);
-    }
-
-    deleteProducto(id){
-        return axios.delete(`${BASE_URL}/${id}`);
-    }
+import axios from 'axios';
+const api = axios.create({
+baseURL: 'http://localhost:9090/api',
+});
+// 🔐 Interceptor: agrega el token en cada request
+api.interceptors.request.use((config) => {
+const token = localStorage.getItem('token');
+config.headers.Authorization = `Bearer ${token}`;
+return config;
+});
+class ProductoService {
+getAllProductos() {
+return api.get('/productos');
 }
-
+getProductoById(id) {
+return api.get(`/productos/${id}`);
+}
+createProducto(producto) {
+return api.post('/productos', producto);
+}
+updateProducto(id, producto) {
+return api.put(`/productos/${id}`, producto);
+}
+deleteProducto(id) {
+return api.delete(`/productos/${id}`);
+}
+}
 export default new ProductoService();
