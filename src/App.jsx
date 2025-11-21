@@ -8,7 +8,7 @@ function App() {
   return (
     <Router>
       <div>
-        <h1>Book Management System</h1>
+        <h1>Producto Management System</h1>
         <Routes>
           <Route path="/" element={<ProductoList />} />
           <Route path="/add" element={<ProductoFrom />} />

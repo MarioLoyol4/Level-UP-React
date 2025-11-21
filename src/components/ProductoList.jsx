@@ -12,9 +12,10 @@ ProductoService.getAllProductos().then(res => setProductos(res.data));
 return (
 <div>
 <h1>Productos</h1>
+
 <ul>
 {productos.map(b => (
-<li key={b.id}>{b.title} - {b.author}</li>
+<li key={b.id}>{b.nombre} - {b.categoria}</li>
 ))}
 </ul>
 </div>
