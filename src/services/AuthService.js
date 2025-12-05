@@ -5,14 +5,14 @@ const AuthService = {
     try {
       console.log('Enviando login para:', email);
       
-      const response = await api.post('/api/auth/login', {
+      const response = await api.post('/auth/login', {
         email,
         password
       });
       
       console.log('Respuesta del login:', response.data);
       
-      if (response.data.success && response.data.token) {
+      if (response.data.token) {
 
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('currentUser', JSON.stringify(response.data.user));
@@ -64,10 +64,15 @@ const AuthService = {
   },
 
   isAuthenticated: () => {
-    const token = localStorage.getItem('token');
-    const user = localStorage.getItem('currentUser');
-    return !!(token && user);
-  },
+  const token = localStorage.getItem('token');
+  const user = localStorage.getItem('currentUser');
+
+  // Evita autenticar si el user es "undefined"
+  if (!token || !user || user === "undefined") return false;
+
+  return true;
+},
+
 
   getCurrentUser: () => {
     const userStr = localStorage.getItem('currentUser');

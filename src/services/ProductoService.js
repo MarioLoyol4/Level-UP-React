@@ -3,7 +3,7 @@ import api from "../api/AxiosConfig";
 const ProductoService = {
   getAll: async () => {
     try {
-      const response = await api.get('/productos');
+      const response = await api.get('/api/productos');
       console.log('Respuesta del backend:', response.data);
       return response.data;
     } catch (error) {
@@ -13,7 +13,7 @@ const ProductoService = {
 
   getById: async (id) => {
     try {
-      const response = await api.get(`/productos/${id}`);
+      const response = await api.get(`/api/productos/${id}`);
       return response.data;
     } catch (error) {
       console.error('Error al obtener producto:', error);
@@ -23,7 +23,7 @@ const ProductoService = {
 
   getByCategoria: async (categoria) => {
     try {
-      const response = await api.get(`/productos/categoria/${categoria}`);
+      const response = await api.get(`/api/productos/categoria/${categoria}`);
       return response.data;
     } catch (error) {
       console.error('Error al obtener por categoría:', error);

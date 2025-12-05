@@ -7,7 +7,6 @@ export default function Register() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     nombre: '',
-    apellido: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -123,19 +122,7 @@ export default function Register() {
               />
             </div>
             
-            <div className="form-group">
-              <label htmlFor="apellido">Apellido</label>
-              <input
-                type="text"
-                id="apellido"
-                name="apellido"
-                value={formData.apellido}
-                onChange={handleChange}
-                placeholder="Ingresa tu apellido"
-                required
-                disabled={loading}
-              />
-            </div>
+          
           </div>
           
           <div className="form-group">
