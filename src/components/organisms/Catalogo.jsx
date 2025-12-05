@@ -14,8 +14,7 @@ export default function Catalogo() {
     { id: 'juegos-mesa', nombre: 'Juegos de Mesa' },
     { id: 'sillas', nombre: 'Sillas Gamer' },
     { id: 'Consolas', nombre: 'Consolas' },
-    { id: 'Accesorios', nombre: 'Accesorios' },
-    { id: 'Sillas Gamers', nombre: 'Sillas Gamers' }
+    { id: 'Accesorios', nombre: 'Accesorios' }
   ];
 
   useEffect(() => {
