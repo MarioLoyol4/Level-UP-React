@@ -23,8 +23,11 @@ function App() {
           <Route path='/nosotros' element={<Nosotros/>}/>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+
+
         </Routes>
       </div>
+      
     </Router>
   );
 }

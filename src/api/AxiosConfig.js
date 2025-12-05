@@ -1,15 +1,14 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:9090/api',
+  baseURL: 'http://localhost:9090/api', // ← ¡URL exacta del backend!
 });
-
-// 🔐 Interceptor REQUEST: agregar token automáticamente
+// Interceptor REQUEST: agregar token automáticamente
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token');  // ← Obtiene token persistido
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      config.headers.Authorization = `Bearer ${token}`; // ← Lo agrega a cada petición
     }
     return config;
   },
@@ -17,8 +16,7 @@ api.interceptors.request.use(
     return Promise.reject(error);
   }
 );
-
-// 🔐 Interceptor RESPONSE: manejar errores 401
+// Interceptor RESPONSE: manejar errores 401
 api.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -26,10 +24,9 @@ api.interceptors.response.use(
       // Token inválido o expirado
       localStorage.removeItem('token');
       localStorage.removeItem('email');
-      window.location.href = '/login';
+      window.location.href = '/login';  // ← Redirige automáticamente
     }
     return Promise.reject(error);
   }
 );
-
 export default api;
