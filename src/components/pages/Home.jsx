@@ -8,9 +8,7 @@ import Noticias from '../organisms/Noticias'
 export default function Home() {
   return (
   <>
-    <First/>
     <Catalogo/>
-    <Noticias/>
 
   </>
     

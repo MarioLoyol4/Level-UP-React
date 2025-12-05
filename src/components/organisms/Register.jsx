@@ -1,133 +1,232 @@
-import React, { useState } from 'react'; 
-import Logo from '../molecules/Logo';
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import AuthService from '../../services/AuthService';
 
-export default function Register({ onSwitchToLogin }) {
-  
-  const [nombre, setNombre] = useState('');
-  const [correo, setCorreo] = useState('');
-  const [direccion, setDireccion] = useState('');
-  const [edad, setEdad] = useState('');
-  const [contra1, setContra1] = useState('');
-  const [contra2, setContra2] = useState('');
+
+export default function Register() {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    nombre: '',
+    apellido: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    fechaNacimiento: ''
+  });
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  
-  const handleSubmit = (event) => {
-    event.preventDefault(); 
-    setError(''); 
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
 
+    if (error) setError('');
+  };
+
+  const validateForm = () => {
+    for (const key in formData) {
+      if (!formData[key].trim()) {
+        setError('Todos los campos son obligatorios');
+        return false;
+      }
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setError('Email inválido');
+      return false;
+    }
+    if (formData.password.length < 6) {
+      setError('La contraseña debe tener al menos 6 caracteres');
+      return false;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      setError('Las contraseñas no coinciden');
+      return false;
+    }
+    const birthDate = new Date(formData.fechaNacimiento);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
     
-    if (!nombre || !correo || !contra1 || !contra2) {
-      setError('Todos los campos son obligatorios (excepto dirección y edad).');
-      return;
-    }
-    if (contra1 !== contra2) {
-      setError('Las contraseñas no coinciden.');
-      return;
-    }
-    if (contra1.length < 6) {
-      setError('La contraseña debe tener al menos 6 caracteres.');
-      return;
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
     }
 
+    if (age < 18) {
+      setError('Debes ser mayor de 18 años para registrarte');
+      return false;
+    }
+    if (birthDate > today) {
+      setError('La fecha de nacimiento no puede ser futura');
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
     
-    const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
-
-    if (usuarios.find(user => user.correo === correo)) {
-      setError('El correo electrónico ya está registrado.');
+    if (!validateForm()) {
       return;
     }
-
-    const nuevoUsuario = {
-      nombre,
-      correo,
-      direccion,
-      edad,
-      password: contra1 
-    };
-
-    usuarios.push(nuevoUsuario);
-    localStorage.setItem('usuarios', JSON.stringify(usuarios));
-
-    alert('¡Registro exitoso! Ahora puedes iniciar sesión.');
-    onSwitchToLogin(); 
+    
+    setLoading(true);
+    
+    try {
+      const result = await AuthService.register(formData);
+      
+      if (result.success) {
+        alert('¡Registro exitoso! Ahora puedes iniciar sesión');
+        navigate('/login');
+      } else {
+        setError(result.error || 'Error en el registro');
+      }
+    } catch (err) {
+      setError('Error al conectar con el servidor');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    
-    <form id="registro" onSubmit={handleSubmit}>
-      <div className='logo'><Logo/></div>
-      <div className="row">
+    <div className="auth-container">
+      <div className="auth-card">
+        <div className="logo-container">
+          <h1>Level Up</h1>
+          <h2>Crear Cuenta</h2>
+        </div>
         
-        <label htmlFor="nombre">Ingrese su nombre y apellido</label>
+        {error && (
+          <div className="error-message">
+            <span>⚠️</span> {error}
+          </div>
+        )}
         
-        <input 
-          type="text" 
-          id="nombre" 
-          value={nombre} 
-          onChange={(e) => setNombre(e.target.value)} 
-        />
+        <form onSubmit={handleSubmit} className="auth-form">
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="nombre">Nombre</label>
+              <input
+                type="text"
+                id="nombre"
+                name="nombre"
+                value={formData.nombre}
+                onChange={handleChange}
+                placeholder="Ingresa tu nombre"
+                required
+                disabled={loading}
+              />
+            </div>
+            
+            <div className="form-group">
+              <label htmlFor="apellido">Apellido</label>
+              <input
+                type="text"
+                id="apellido"
+                name="apellido"
+                value={formData.apellido}
+                onChange={handleChange}
+                placeholder="Ingresa tu apellido"
+                required
+                disabled={loading}
+              />
+            </div>
+          </div>
+          
+          <div className="form-group">
+            <label htmlFor="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="ejemplo@correo.com"
+              required
+              disabled={loading}
+            />
+          </div>
+          
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="password">Contraseña</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Mínimo 6 caracteres"
+                required
+                disabled={loading}
+              />
+            </div>
+            
+            <div className="form-group">
+              <label htmlFor="confirmPassword">Confirmar Contraseña</label>
+              <input
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                placeholder="Repite tu contraseña"
+                required
+                disabled={loading}
+              />
+            </div>
+          </div>
+          
+          <div className="form-group">
+            <label htmlFor="fechaNacimiento">Fecha de Nacimiento</label>
+            <input
+              type="date"
+              id="fechaNacimiento"
+              name="fechaNacimiento"
+              value={formData.fechaNacimiento}
+              onChange={handleChange}
+              required
+              disabled={loading}
+              max={new Date().toISOString().split('T')[0]}
+            />
+            <small className="form-hint">Debes ser mayor de 18 años</small>
+          </div>
+          
+          <button 
+            type="submit" 
+            className="btn-primary auth-btn"
+            disabled={loading}
+          >
+            {loading ? (
+              <>
+                <span className="spinner"></span>
+                Registrando...
+              </>
+            ) : (
+              'Registrarse'
+            )}
+          </button>
+        </form>
+        
+        <div className="auth-footer">
+          <p>
+            ¿Ya tienes una cuenta?{' '}
+            <Link to="/login" className="auth-link">
+              Inicia sesión aquí
+            </Link>
+          </p>
+          <p>
+            <Link to="/" className="auth-link">
+              ← Volver al inicio
+            </Link>
+          </p>
+        </div>
       </div>
-      <div className="row">
-        <label htmlFor="correo">Ingrese un correo</label>
-        <input 
-          type="email" 
-          id="correo" 
-          value={correo}
-          onChange={(e) => setCorreo(e.target.value)}
-        />
-      </div>
-      <div className="row">
-        <label htmlFor="direccion">Ingrese su direccion</label>
-        <input 
-          type="text" 
-          id="direccion" 
-          value={direccion}
-          onChange={(e) => setDireccion(e.target.value)}
-        />
-      </div>
-      <div className="row">
-        <label htmlFor="edad">Ingrese su fecha de nacimiento</label>
-        <input 
-          type="date" 
-          id="edad" 
-          value={edad}
-          onChange={(e) => setEdad(e.target.value)}
-        />
-      </div>
-      <div className="row">
-        <label htmlFor="contra1">Ingrese una contraseña</label>
-        <input 
-          type="password" 
-          id="contra1" 
-          value={contra1}
-          onChange={(e) => setContra1(e.target.value)}
-        />
-      </div>
-      <div className="row">
-        <label htmlFor="contra2">Confirme su contraseña</label>
-        <input 
-          type="password" 
-          id="contra2" 
-          value={contra2}
-          onChange={(e) => setContra2(e.target.value)}
-        />
-      </div>
-      <button type="submit">Registrar</button>
-      
-    
-      {error ? (
-        <p id="errores" style={{ color: 'red' }}>{error}</p>
-      ) : (
-        <p id="errores">&nbsp;</p>
-      )}
-      
-      <div className="login-link">
-        ¿Ya tienes cuenta?{' '}
-        <a href="#" id="show-login" onClick={onSwitchToLogin}>
-          Inicia sesion
-        </a>
-      </div>
-    </form>
+    </div>
   );
 }

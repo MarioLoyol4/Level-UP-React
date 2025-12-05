@@ -1,81 +1,104 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Logo from '../molecules/Logo'; 
+import Logo from '../molecules/Logo';
+import AuthService from '../../services/AuthService';
 
 export default function First() {
-  
   const navigate = useNavigate();
-  const usuarioLogueado = sessionStorage.getItem('usuarioLogueado');
+  const [productosCarrito, setProductosCarrito] = useState(0);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState(null);
 
-  const handleLogout = (event) => {
-    event.preventDefault();
-    sessionStorage.removeItem('usuarioLogueado');
-    navigate('/login');
+  useEffect(() => {
+    checkAuth();
+    cargarContadorCarrito();
+
+    window.addEventListener('carritoActualizado', cargarContadorCarrito);
+    window.addEventListener('authChange', checkAuth);
+    
+    return () => {
+      window.removeEventListener('carritoActualizado', cargarContadorCarrito);
+      window.removeEventListener('authChange', checkAuth);
+    };
+  }, []);
+
+  const checkAuth = () => {
+    const loggedIn = AuthService.isAuthenticated();
+    setIsLoggedIn(loggedIn);
+    if (loggedIn) {
+      setUser(AuthService.getCurrentUser());
+    } else {
+      setUser(null);
+    }
   };
 
-  const handleToggleMenu = () => {
-    const nav = document.querySelector('.main-nav ul');
-    nav.classList.toggle('active');
+  const cargarContadorCarrito = async () => {
+    try {
+      const carritoLocal = localStorage.getItem('carrito');
+      if (carritoLocal) {
+        const carrito = JSON.parse(carritoLocal);
+        const totalItems = carrito.reduce((total, item) => total + item.cantidad, 0);
+        setProductosCarrito(totalItems);
+      }
+    } catch (error) {
+      console.error('Error cargando contador del carrito:', error);
+    }
+  };
+
+  const handleLogout = () => {
+    AuthService.logout();
+    setIsLoggedIn(false);
+    setUser(null);
+    navigate('/');
+    window.dispatchEvent(new Event('authChange'));
   };
 
   return (
-    <header className="site-header" id="first">
-      
-      <div className="top-bar">
-        <div className="logo-container">
-          <Logo /> 
+    <header className="site-header">
+      <nav className="main-nav">
+        <div className="nav-left">
+          <div className="logo-container">
+            <Logo />
+          </div>
+          
+          <ul>
+            <li><Link to="/">🏠 Inicio</Link></li>
+            <li><Link to="/noticias">📰 Noticias</Link></li>
+            <li><Link to="/nosotros">👥 Nosotros</Link></li>
+
+          </ul>
         </div>
         
-        <form className="search-bar">
-          <input type="text" placeholder="Buscar..." />
-          <button type="submit" className="btn-secondary">Buscar</button>
-        </form>
-        
-        <div className="user-auth">
-          {usuarioLogueado ? (
+        <div className="nav-right">
+          {isLoggedIn ? (
             <>
-              <Link to="/perfil" className="btn-secondary">Mi Perfil</Link>
-              <a href="#" onClick={handleLogout} className="btn-primary">Cerrar Sesión</a>
+              <div className="user-info">
+                <span className="user-name">👤 {user?.nombre || 'Usuario'}</span>
+              </div>
+              <Link to="/perfil" className="btn-profile">
+                Mi Perfil
+              </Link>
+              <button onClick={handleLogout} className="btn-logout">
+                🚪 Salir
+              </button>
             </>
           ) : (
             <>
-              <Link to="/login" className="btn-secondary">Iniciar Sesión</Link>
-              <Link to="/register" className="btn-primary">Crear Cuenta</Link>
+              <Link to="/login" className="btn-login">
+                🔑 Iniciar Sesión
+              </Link>
+              <Link to="/register" className="btn-register">
+                📝 Registrarse
+              </Link>
             </>
           )}
+          
+          <Link to="/cart" className="cart-link">
+            🛒 Carrito 
+            {productosCarrito > 0 && <span className="items">{productosCarrito}</span>}
+          </Link>
         </div>
-
-        <button className="menu-toggle" onClick={handleToggleMenu}>
-          &#9776;
-        </button>
-      </div>
-
-      <nav className="main-nav">
-        <ul>
-          <li><Link to="/">Home</Link></li>
-          <li className="dropdown">
-            <Link to="/catalogo">Categorías ▾</Link>
-            <ul className="submenu" id="submenu">
-              <li><Link to="/JuegosDeMesa" data-cat="juegos-mesa">Juegos de Mesa</Link></li>
-              <li><Link to="/Accesorios" data-cat="accesorios">Accesorios</Link></li>
-              <li><Link to="/Consolas" data-cat="consolas">Consolas</Link></li>
-              <li><Link to="/Pc_gamer" data-cat="pc-gamer">Computadores Gamers</Link></li>
-              <li><Link to="/Sillas" data-cat="sillas">Sillas Gamers</Link></li>
-              <li><Link to="/Mouse" data-cat="mouse">Mouse</Link></li>
-              <li><Link to="/Mousepad" data-cat="mousepad">Mousepad</Link></li>
-            </ul>
-          </li>
-          <li><Link to="/ofertas">Ofertas</Link></li>
-          <li><Link to="/nosotros">Nosotros</Link></li>
-          <li><Link to="/blog">Blog</Link></li>
-          <li><Link to="/contacto">Contacto</Link></li>
-        </ul>
-        
-        <Link to="/cart" className="btn-primary cart-button">
-          🛒 Carrito
-        </Link>
       </nav>
-      
     </header>
   );
 }
